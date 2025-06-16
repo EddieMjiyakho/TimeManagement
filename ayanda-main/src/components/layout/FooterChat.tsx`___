@@ -1,0 +1,62 @@
+"use client";
+
+import React, { useState } from 'react';
+import { Send } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { cn } from '@/lib/utils';
+
+interface FooterChatProps {
+  onSendCommand: (command: string) => void; // New prop
+}
+
+export function FooterChat({ onSendCommand }: FooterChatProps) { // Destructure new prop
+  const [message, setMessage] = useState('');
+
+  const handleSend = () => {
+    if (message.trim()) {
+      onSendCommand(message.trim()); // Use the handler
+      setMessage('');
+    }
+  };
+  // ... (rest of the component remains the same styling as before) ...
+  return (
+    <div 
+      className={cn(
+        "fixed bottom-6 left-1/2 -translate-x-1/2 z-[98]",
+        "w-[clamp(300px,60%,700px)]", 
+        "bg-[rgba(20,20,20,0.9)] backdrop-blur-md",
+        "border border-[var(--border-color-val)] rounded-full",
+        "pl-5 pr-2 py-2",
+        "shadow-[0_10px_30px_rgba(0,0,0,0.5)]",
+        "flex items-center"
+      )}
+    >
+      <Input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="AIDA, what can I help you with?"
+        className={cn(
+          "flex-grow bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0",
+          "text-[var(--text-color-val)] text-[0.925rem] placeholder:text-[var(--text-muted-color-val)]"
+        )}
+        onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+      />
+      <Button 
+        size="icon"
+        onClick={handleSend} 
+        className={cn(
+          "bg-[var(--accent-color-val)] text-[var(--background-color-val)] hover:bg-[#00B8D4]",
+          "rounded-full w-10 h-10",
+          "flex items-center justify-center shrink-0 ml-2"
+        )}
+        disabled={!message.trim()}
+        aria-label="Submit AI Input"
+      >
+        <Send className="w-5 h-5" />
+      </Button>
+    </div>
+  );
+}
+
